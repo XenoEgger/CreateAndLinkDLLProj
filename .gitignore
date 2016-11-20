@@ -14,7 +14,6 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -38,6 +37,7 @@
 *.opensdf
 *.sdf
 *.VC.opendb
+*.VC.db
 
 # Precompiled Assets
 SourceArt/**/*.png
