@@ -19,10 +19,16 @@ public:
 	static bool importDLL( FString folder, FString name);
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethod( FString name);
+	static bool importMethodGetCircleArea();
+
+	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
+	static bool importMethodGetCircleString();
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static float getCircleAreaDLL(float radius);
+
+	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
+	static FString getCircleStringDLL(FString baseString);
 	
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static void freeDLL();

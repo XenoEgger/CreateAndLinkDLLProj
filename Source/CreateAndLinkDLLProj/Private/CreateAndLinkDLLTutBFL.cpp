@@ -2,11 +2,16 @@
 
 #include "CreateAndLinkDLLProj.h"
 #include "CreateAndLinkDLLTutBFL.h"
+#include <string>
 
 typedef float(*_getCircleArea)(float radius); // Declare the DLL function.
+typedef std::string(*_getCircleString)(std::string baseString); // Declare the DLL function.
 
 _getCircleArea DLLgetCircleArea;
+_getCircleString DLLgetCircleString;
+
 void *DLLHandle;
+
 
 bool UCreateAndLinkDLLTutBFL::importDLL(FString folder, FString name)
 {
@@ -23,13 +28,29 @@ bool UCreateAndLinkDLLTutBFL::importDLL(FString folder, FString name)
 	return false;
 }
 
-bool UCreateAndLinkDLLTutBFL::importMethod(FString name)
+bool UCreateAndLinkDLLTutBFL::importMethodGetCircleArea()
 {
 	if (DLLHandle != NULL)
 	{
-		FString procName = name; // The exact name of the DLL function.
+		DLLgetCircleArea = NULL;
+		FString procName = "getCircleArea"; // The exact name of the DLL function.
 		DLLgetCircleArea = (_getCircleArea)FPlatformProcess::GetDllExport(DLLHandle, *procName); // Export the DLL function.
 		if (DLLgetCircleArea != NULL)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UCreateAndLinkDLLTutBFL::importMethodGetCircleString()
+{
+	if (DLLHandle != NULL)
+	{
+		DLLgetCircleString = NULL;
+		FString procName = "getCircleString"; // The exact name of the DLL function.
+		DLLgetCircleString = (_getCircleString)FPlatformProcess::GetDllExport(DLLHandle, *procName); // Export the DLL function.
+		if (DLLgetCircleString != NULL)
 		{
 			return true;
 		}
@@ -45,6 +66,18 @@ float UCreateAndLinkDLLTutBFL::getCircleAreaDLL(float radius)
 		return out; // return to UE
 	}
 	return -1.00f;
+}
+
+FString UCreateAndLinkDLLTutBFL::getCircleStringDLL(FString baseString)
+{
+	if (DLLgetCircleString != NULL)
+	{
+		std::string baseStringUTF8(TCHAR_TO_UTF8(*baseString));
+		std::string resultFromDLLString = DLLgetCircleString(baseStringUTF8);
+
+		return (resultFromDLLString.c_str());
+	}
+	return "Error: getCircleStringDLL didn't return!";
 }
 
 void UCreateAndLinkDLLTutBFL::freeDLL()
