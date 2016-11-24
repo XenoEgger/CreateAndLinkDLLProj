@@ -62,7 +62,7 @@ float UCreateAndLinkDLLTutBFL::getCircleAreaDLL(float radius)
 {
 	if (DLLgetCircleArea != NULL)
 	{
-		float out = DLLgetCircleArea(radius); // Call the DLL function, with arguments corresponding to the signature and return type of the function.
+		float out = float(DLLgetCircleArea(radius)); // Call the DLL function, with arguments corresponding to the signature and return type of the function.
 		return out; // return to UE
 	}
 	return -1.00f;
@@ -73,7 +73,7 @@ FString UCreateAndLinkDLLTutBFL::getCircleStringDLL(FString baseString)
 	if (DLLgetCircleString != NULL)
 	{
 		std::string baseStringUTF8(TCHAR_TO_UTF8(*baseString));
-		std::string resultFromDLLString = DLLgetCircleString(baseStringUTF8);
+		std::string resultFromDLLString = std::string(DLLgetCircleString(baseStringUTF8));
 
 		return (resultFromDLLString.c_str());
 	}
