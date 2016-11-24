@@ -1,90 +1,94 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CreateAndLinkDLLProj.h"
 #include "CreateAndLinkDLLTutBFL.h"
 #include <string>
 
-typedef float(*_getCircleArea)(float radius); // Declare the DLL function.
-typedef std::string(*_getCircleString)(std::string baseString); // Declare the DLL function.
+typedef float(*_getCircleArea)(float radius); // Declare a method to store the DLL method getCircleArea.
+typedef std::string(*_getAdditionalString)(std::string baseString); // Declare a method to store the DLL method getAdditionalString.
 
-_getCircleArea DLLgetCircleArea;
-_getCircleString DLLgetCircleString;
+_getCircleArea m_getCircleAreaFromDll;
+_getAdditionalString m_getAdditionalStringFromDll;
 
-void *DLLHandle;
+void *v_dllHandle;
 
-
+// Method to import a DLL.
 bool UCreateAndLinkDLLTutBFL::importDLL(FString folder, FString name)
 {
-	FString filePath = *FPaths::GamePluginsDir() + folder + name;
+	FString filePath = *FPaths::GamePluginsDir() + folder + "/" + name;
 	
 	if (FPaths::FileExists(filePath))
 	{
-		DLLHandle = FPlatformProcess::GetDllHandle(*filePath); // Retrieve the DLL.
-		if (DLLHandle != NULL)
+		v_dllHandle = FPlatformProcess::GetDllHandle(*filePath); // Retrieve the DLL.
+		if (v_dllHandle != NULL)
 		{
 			return true;
 		}
 	}
-	return false;
+	return false;	// Return an error.
 }
 
+// Method to import the method getCircleArea from the DLL.
 bool UCreateAndLinkDLLTutBFL::importMethodGetCircleArea()
 {
-	if (DLLHandle != NULL)
+	if (v_dllHandle != NULL)
 	{
-		DLLgetCircleArea = NULL;
-		FString procName = "getCircleArea"; // The exact name of the DLL function.
-		DLLgetCircleArea = (_getCircleArea)FPlatformProcess::GetDllExport(DLLHandle, *procName); // Export the DLL function.
-		if (DLLgetCircleArea != NULL)
+		m_getCircleAreaFromDll = NULL;
+		FString procName = "getCircleArea";	// Needs to be the exact name of the DLL method.
+		m_getCircleAreaFromDll = (_getCircleArea)FPlatformProcess::GetDllExport(v_dllHandle, *procName);
+		if (m_getCircleAreaFromDll != NULL)
 		{
 			return true;
 		}
 	}
-	return false;
+	return false;	// Return an error.
 }
 
-bool UCreateAndLinkDLLTutBFL::importMethodGetCircleString()
+// Method to import the method getAdditionalString from the DLL.
+bool UCreateAndLinkDLLTutBFL::importMethodGetAdditionalString()
 {
-	if (DLLHandle != NULL)
+	if (v_dllHandle != NULL)
 	{
-		DLLgetCircleString = NULL;
-		FString procName = "getCircleString"; // The exact name of the DLL function.
-		DLLgetCircleString = (_getCircleString)FPlatformProcess::GetDllExport(DLLHandle, *procName); // Export the DLL function.
-		if (DLLgetCircleString != NULL)
+		m_getAdditionalStringFromDll = NULL;
+		FString procName = "getAdditionalString"; // Needs to be the exact name of the DLL method.
+		m_getAdditionalStringFromDll = (_getAdditionalString)FPlatformProcess::GetDllExport(v_dllHandle, *procName);
+		if (m_getAdditionalStringFromDll != NULL)
 		{
 			return true;
 		}
 	}
-	return false;
+	return false;	// Return an error.
 }
 
-float UCreateAndLinkDLLTutBFL::getCircleAreaDLL(float radius)
+// Method to call the method m_getCircleAreaFromDll that was imported from the DLL.
+float UCreateAndLinkDLLTutBFL::getCircleAreaFromDll(float radius)
 {
-	if (DLLgetCircleArea != NULL)
+	if (m_getCircleAreaFromDll != NULL)
 	{
-		float out = float(DLLgetCircleArea(radius)); // Call the DLL function, with arguments corresponding to the signature and return type of the function.
-		return out; // return to UE
+		float out = float(m_getCircleAreaFromDll(radius)); // Call the DLL method with arguments corresponding to the exact signature and return type of the method.
+		return out;
 	}
-	return -1.00f;
+	return -1.00f;	// Return an error.
 }
 
-FString UCreateAndLinkDLLTutBFL::getCircleStringDLL(FString baseString)
+// Method to call the method m_getAdditionalStringFromDll that was imported from the DLL.
+FString UCreateAndLinkDLLTutBFL::getAdditionalStringFromDll(FString baseString)
 {
-	if (DLLgetCircleString != NULL)
+	if (m_getAdditionalStringFromDll != NULL)
 	{
 		std::string baseStringUTF8(TCHAR_TO_UTF8(*baseString));
-		std::string resultFromDLLString = std::string(DLLgetCircleString(baseStringUTF8));
+		std::string resultFromDLLString = std::string(m_getAdditionalStringFromDll(baseStringUTF8));
 
 		return (resultFromDLLString.c_str());
 	}
-	return "Error: getCircleStringDLL didn't return!";
+	return "Error: Method was probabey not imported yet!";	// Return an error.
 }
 
+// If you love something  set it free.
 void UCreateAndLinkDLLTutBFL::freeDLL()
 {
-	if (DLLHandle != NULL)
+	if (v_dllHandle != NULL)
 	{
-		FPlatformProcess::FreeDllHandle(DLLHandle);
+		FPlatformProcess::FreeDllHandle(v_dllHandle);
 	}
 }
 

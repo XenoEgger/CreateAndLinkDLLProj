@@ -1,13 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "CreateAndLinkDLLTutBFL.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class CREATEANDLINKDLLPROJ_API UCreateAndLinkDLLTutBFL : public UBlueprintFunctionLibrary
 {
@@ -22,13 +19,13 @@ public:
 	static bool importMethodGetCircleArea();
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethodGetCircleString();
+	static bool importMethodGetAdditionalString();
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static float getCircleAreaDLL(float radius);
+	static float getCircleAreaFromDll(float radius);
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static FString getCircleStringDLL(FString baseString);
+	static FString getAdditionalStringFromDll(FString baseString);
 	
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static void freeDLL();
