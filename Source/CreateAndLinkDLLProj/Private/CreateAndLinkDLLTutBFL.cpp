@@ -105,10 +105,10 @@ bool UCreateAndLinkDLLTutBFL::importMethodGetAdditionalString()
 
 #pragma region Method Calls
 
-// Calls the method m_getCircleAreaFromDll that was imported from the DLL.
+// Calls the method getInvertedBoolFromDll that was imported from the DLL.
 bool UCreateAndLinkDLLTutBFL::getInvertedBoolFromDll(bool boolState)
 {
-	if (m_getCircleAreaFromDll != NULL)
+	if (m_getInvertedBoolFromDll != NULL)
 	{
 		bool out = bool(m_getInvertedBoolFromDll(boolState)); // Call the DLL method with arguments corresponding to the exact signature and return type of the method.
 		return out;
@@ -139,7 +139,7 @@ float UCreateAndLinkDLLTutBFL::getCircleAreaFromDll(float radius)
 }
 
 // BUGGY: Calls the method m_getAdditionalStringFromDll that was imported from the DLL.
-// To send the receive the origial baseString variable value seems to work all the time. Changes of the return value in the DLL causes the crashes.
+// To send and receive the origial baseString variable value seems to work all the time. Changes of the return value in the DLL causes the random crashes.
 FString UCreateAndLinkDLLTutBFL::getAdditionalStringFromDll(FString baseString)
 {
 	if (m_getAdditionalStringFromDll != NULL)
@@ -160,9 +160,14 @@ void UCreateAndLinkDLLTutBFL::freeDLL()
 {
 	if (v_dllHandle != NULL)
 	{
+		m_getInvertedBoolFromDll = NULL;
+		m_getIntPlusPlusFromDll = NULL;
+		m_getCircleAreaFromDll = NULL;
+		m_getAdditionalStringFromDll = NULL;
+
 		FPlatformProcess::FreeDllHandle(v_dllHandle);
 		v_dllHandle = NULL;
 	}
 }
-#pragma endregion
+#pragma endregion Unload DLL
 
