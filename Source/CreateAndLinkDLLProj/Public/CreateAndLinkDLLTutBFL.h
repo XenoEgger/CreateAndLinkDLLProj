@@ -25,6 +25,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static bool importMethodGetCircleArea();
+
+	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
+	static bool importMethodGetCharArray();
 	
 	//buggy
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
@@ -40,6 +43,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static float getCircleAreaFromDll(float radius);
+
+	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
+	static FString getCharArrayFromDll(FString parameterText);
 
 	//buggy
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")

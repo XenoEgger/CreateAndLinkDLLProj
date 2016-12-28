@@ -7,12 +7,14 @@
 typedef bool(*_getInvertedBool)(bool boolState); // Declare a method to store the DLL method getInvertedBool.
 typedef int(*_getIntPlusPlus)(int lastInt); // Declare a method to store the DLL method getIntPlusPlus.
 typedef float(*_getCircleArea)(float radius); // Declare a method to store the DLL method getCircleArea.
+typedef char*(*_getCharArray)(); // Declare a method to store the DLL method getCircleArea.
 typedef std::string(*_getAdditionalString)(std::string baseString); // Declare a method to store the DLL method getAdditionalString.
 
 _getInvertedBool m_getInvertedBoolFromDll;
 _getIntPlusPlus m_getIntPlusPlusFromDll;
 _getCircleArea m_getCircleAreaFromDll;
 _getAdditionalString m_getAdditionalStringFromDll;
+_getCharArray m_getCharArrayFromDLL;
 
 void *v_dllHandle;
 
@@ -86,6 +88,22 @@ bool UCreateAndLinkDLLTutBFL::importMethodGetCircleArea()
 	return false;	// Return an error.
 }
 
+// Imports the method getCircleArea from the DLL.
+bool UCreateAndLinkDLLTutBFL::importMethodGetCharArray()
+{
+	if (v_dllHandle != NULL)
+	{
+		m_getCharArrayFromDLL = NULL;
+		FString procName = "getCharArray";	// Needs to be the exact name of the DLL method.
+		m_getCharArrayFromDLL = (_getCharArray)FPlatformProcess::GetDllExport(v_dllHandle, *procName);
+		if (m_getCharArrayFromDLL != NULL)
+		{
+			return true;
+		}
+	}
+	return false;	// Return an error.
+}
+
 // Imports the method getAdditionalString from the DLL.
 bool UCreateAndLinkDLLTutBFL::importMethodGetAdditionalString()
 {
@@ -136,6 +154,19 @@ float UCreateAndLinkDLLTutBFL::getCircleAreaFromDll(float radius)
 		return out;
 	}
 	return -1.00f;	// Return an error.
+}
+
+FString UCreateAndLinkDLLTutBFL::getCharArrayFromDll(FString parameterText)
+{
+	if (m_getCharArrayFromDLL != NULL)
+	{
+		char* parameterChar = TCHAR_TO_ANSI(*parameterText);
+
+		char* returnChar = m_getCharArrayFromDLL( );
+
+		return (ANSI_TO_TCHAR(returnChar));	// Return an error.
+	}
+	return "Error: Method was probabey not imported yet!";	// Return an error.
 }
 
 // BUGGY: Calls the method m_getAdditionalStringFromDll that was imported from the DLL.
