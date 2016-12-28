@@ -7,7 +7,7 @@
 typedef bool(*_getInvertedBool)(bool boolState); // Declare a method to store the DLL method getInvertedBool.
 typedef int(*_getIntPlusPlus)(int lastInt); // Declare a method to store the DLL method getIntPlusPlus.
 typedef float(*_getCircleArea)(float radius); // Declare a method to store the DLL method getCircleArea.
-typedef char*(*_getCharArray)(); // Declare a method to store the DLL method getCircleArea.
+typedef char*(*_getCharArray)(char* parameterText); // Declare a method to store the DLL method getCircleArea.
 typedef std::string(*_getAdditionalString)(std::string baseString); // Declare a method to store the DLL method getAdditionalString.
 
 _getInvertedBool m_getInvertedBoolFromDll;
@@ -162,7 +162,7 @@ FString UCreateAndLinkDLLTutBFL::getCharArrayFromDll(FString parameterText)
 	{
 		char* parameterChar = TCHAR_TO_ANSI(*parameterText);
 
-		char* returnChar = m_getCharArrayFromDLL( );
+		char* returnChar = m_getCharArrayFromDLL(parameterChar);
 
 		return (ANSI_TO_TCHAR(returnChar));	// Return an error.
 	}
