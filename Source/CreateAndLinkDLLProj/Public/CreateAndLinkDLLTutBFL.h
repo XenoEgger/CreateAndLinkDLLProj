@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
@@ -29,10 +28,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static bool importMethodGetCharArray();
 	
-	//buggy
-	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethodGetAdditionalString();
-
 
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
@@ -46,10 +41,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static FString getCharArrayFromDll(FString parameterText);
-
-	//buggy
-	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static FString getAdditionalStringFromDll(FString baseString);
 	
 
 

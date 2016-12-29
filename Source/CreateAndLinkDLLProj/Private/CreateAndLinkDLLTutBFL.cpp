@@ -1,20 +1,16 @@
 
 #include "CreateAndLinkDLLProj.h"
 #include "CreateAndLinkDLLTutBFL.h"
-#include <string>
-
 
 typedef bool(*_getInvertedBool)(bool boolState); // Declare a method to store the DLL method getInvertedBool.
 typedef int(*_getIntPlusPlus)(int lastInt); // Declare a method to store the DLL method getIntPlusPlus.
 typedef float(*_getCircleArea)(float radius); // Declare a method to store the DLL method getCircleArea.
-typedef char*(*_getCharArray)(char* parameterText); // Declare a method to store the DLL method getCircleArea.
-typedef std::string(*_getAdditionalString)(std::string baseString); // Declare a method to store the DLL method getAdditionalString.
+typedef char*(*_getCharArray)(char* parameterText); // Declare a method to store the DLL method getCharArray.
 
 _getInvertedBool m_getInvertedBoolFromDll;
 _getIntPlusPlus m_getIntPlusPlusFromDll;
 _getCircleArea m_getCircleAreaFromDll;
-_getAdditionalString m_getAdditionalStringFromDll;
-_getCharArray m_getCharArrayFromDLL;
+_getCharArray m_getCharArrayFromDll;
 
 void *v_dllHandle;
 
@@ -88,31 +84,15 @@ bool UCreateAndLinkDLLTutBFL::importMethodGetCircleArea()
 	return false;	// Return an error.
 }
 
-// Imports the method getCircleArea from the DLL.
+// Imports the method getCharArray from the DLL.
 bool UCreateAndLinkDLLTutBFL::importMethodGetCharArray()
 {
 	if (v_dllHandle != NULL)
 	{
-		m_getCharArrayFromDLL = NULL;
+		m_getCharArrayFromDll = NULL;
 		FString procName = "getCharArray";	// Needs to be the exact name of the DLL method.
-		m_getCharArrayFromDLL = (_getCharArray)FPlatformProcess::GetDllExport(v_dllHandle, *procName);
-		if (m_getCharArrayFromDLL != NULL)
-		{
-			return true;
-		}
-	}
-	return false;	// Return an error.
-}
-
-// Imports the method getAdditionalString from the DLL.
-bool UCreateAndLinkDLLTutBFL::importMethodGetAdditionalString()
-{
-	if (v_dllHandle != NULL)
-	{
-		m_getAdditionalStringFromDll = NULL;
-		FString procName = "getAdditionalString"; // Needs to be the exact name of the DLL method.
-		m_getAdditionalStringFromDll = (_getAdditionalString)FPlatformProcess::GetDllExport(v_dllHandle, *procName);
-		if (m_getAdditionalStringFromDll != NULL)
+		m_getCharArrayFromDll = (_getCharArray)FPlatformProcess::GetDllExport(v_dllHandle, *procName);
+		if (m_getCharArrayFromDll != NULL)
 		{
 			return true;
 		}
@@ -156,29 +136,16 @@ float UCreateAndLinkDLLTutBFL::getCircleAreaFromDll(float radius)
 	return -1.00f;	// Return an error.
 }
 
+// Calls the method m_getCharArrayFromDLL that was imported from the DLL.
 FString UCreateAndLinkDLLTutBFL::getCharArrayFromDll(FString parameterText)
 {
-	if (m_getCharArrayFromDLL != NULL)
+	if (m_getCharArrayFromDll != NULL)
 	{
 		char* parameterChar = TCHAR_TO_ANSI(*parameterText);
 
-		char* returnChar = m_getCharArrayFromDLL(parameterChar);
+		char* returnChar = m_getCharArrayFromDll(parameterChar);
 
 		return (ANSI_TO_TCHAR(returnChar));	// Return an error.
-	}
-	return "Error: Method was probabey not imported yet!";	// Return an error.
-}
-
-// BUGGY: Calls the method m_getAdditionalStringFromDll that was imported from the DLL.
-// To send and receive the origial baseString variable value seems to work all the time. Changes of the return value in the DLL causes the random crashes.
-FString UCreateAndLinkDLLTutBFL::getAdditionalStringFromDll(FString baseString)
-{
-	if (m_getAdditionalStringFromDll != NULL)
-	{
-		std::string baseStringUTF8(TCHAR_TO_UTF8(*baseString));
-		std::string resultFromDLLString = std::string(m_getAdditionalStringFromDll(baseStringUTF8));
-
-		return (resultFromDLLString.c_str());
 	}
 	return "Error: Method was probabey not imported yet!";	// Return an error.
 }
@@ -194,7 +161,7 @@ void UCreateAndLinkDLLTutBFL::freeDLL()
 		m_getInvertedBoolFromDll = NULL;
 		m_getIntPlusPlusFromDll = NULL;
 		m_getCircleAreaFromDll = NULL;
-		m_getAdditionalStringFromDll = NULL;
+		m_getCharArrayFromDll = NULL;
 
 		FPlatformProcess::FreeDllHandle(v_dllHandle);
 		v_dllHandle = NULL;
