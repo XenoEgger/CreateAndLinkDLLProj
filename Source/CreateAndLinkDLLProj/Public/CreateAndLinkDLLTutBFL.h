@@ -17,16 +17,19 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethodGetInvertedBool();
+	static bool importMethodGetInvertedBool( );
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethodGetIntPlusPlus();
+	static bool importMethodGetIntPlusPlus( );
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethodGetCircleArea();
+	static bool importMethodGetCircleArea( );
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
-	static bool importMethodGetCharArray();
+	static bool importMethodGetCharArray( );
+
+	UFUNCTION( BlueprintCallable, Category = "My DLL Library" )
+	static bool importMethodGetVector4( );
 	
 
 
@@ -41,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "My DLL Library")
 	static FString getCharArrayFromDll(FString parameterText);
+
+	UFUNCTION( BlueprintCallable, Category = "My DLL Library" )
+	static FVector4 getVector4FromDll( FVector4 vector4 );
 	
 
 
